@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { testing_data } from './data';
@@ -21,14 +21,24 @@ const Block = styled.canvas`
 `;
 
 const GraphContainer: FunctionComponent = () => {
+  useEffect(() => {
+    building1 = document.createElement('img');
+    building2 = document.createElement('img');
+    building3 = document.createElement('img');
+    building4 = document.createElement('img');
+    initDraw();
+  }, [input_data]);
+
   return <Block id="transmit" width="2700" height="930" />;
 };
 
 export default GraphContainer;
 
-// testing data, need to change these data source to API
-// curr_building: login user(building)
-// input_data: transmission data
+/**
+ * testing data, need to change these data source to API
+ * curr_building: login user(building)
+ * input_data: transmission data
+ */
 const curr_building = 'SGESC_C_BEMS';
 const input_data = testing_data;
 
@@ -73,6 +83,9 @@ function initDraw() {
 function drawGraph() {
   // init canvas
   const canvas = document.getElementById('transmit') as HTMLCanvasElement;
+  if (!canvas) {
+    return;
+  }
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, 2700, 930);
 
@@ -129,16 +142,6 @@ function drawGraph() {
 
   // draw buildings' name
   drawBuildingName(ctx);
-}
-
-// render in browser
-if (process.browser) {
-  // create building images
-  building1 = document.createElement('img');
-  building2 = document.createElement('img');
-  building3 = document.createElement('img');
-  building4 = document.createElement('img');
-  initDraw();
 }
 
 function drawPath(ctx: CanvasRenderingContext2D, path_info: number[][]) {
